@@ -1,0 +1,387 @@
+{% extends 'index.html' %}
+{% block content %}
+<!--<div class="container-fluid">-->
+  <style>
+    .decorated-dropdown {
+      margin-top: 15px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      appearance: none;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      background-image: none;
+    }
+
+    .box {
+      margin-top: 15px;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px;
+      background-color: #383d44;
+      border: 1px;
+      border-radius: 4px;
+      display: inline;
+      float: right;
+      margin-right: 60px;
+    }
+
+    .chart-container-wrapper {
+      display: flex;
+      justify-content: space-around;
+      margin: 10px;
+      width: min-content;
+      border: 2px solid #a3a1a1;
+      border-radius: 10px;
+    }
+
+    .chart-container {
+      width: 600px;
+      height: 400px;
+      border: 1px solid #cccccc;
+      background-color: rgb(128, 190, 190);
+      border-radius: 10px;
+      padding: 10px;
+      margin: 20px;
+      margin-top: 40px;
+
+  }
+
+  </style>
+
+
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Analysis Data</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Dashboard v2</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+        <div class="row">
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box">
+              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-male"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">Male</span>
+                <span class="info-box-number" id="male_count"></span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+              <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-female"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">Female</span>
+                <span class="info-box-number" id="female_count"></span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+
+          <!-- fix for small devices only -->
+          <div class="clearfix hidden-md-up"></div>
+
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-users"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">Highest Male Category</span>
+                <span class="info-box-number" id="maleCategory"></span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+              <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">Highest Female Category</span>
+                <span class="info-box-number" id="femaleCategory"></span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+        </div>
+<div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">Graphical Analysis</h5>
+
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <div class="btn-group">
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <select class="decorated-dropdown" id="graph-select">
+                <option value="current">Current stats</option>
+                <option value="week">Last week stats</option>
+                <option value="month">Last month stats</option>
+                <option value="all">All time stats</option>
+              </select>
+              <div class="box" id="cur_date"></div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-8">
+                    <p class="text-center">
+                      <!--<strong>Sales: 1 Jan, 2014 - 30 Jul, 2014</strong>-->
+                    </p>
+                    <div class="chart-container-wrapper">
+                      <div class="info-box" 
+                        style=" width: 450px;
+                        height: 400px; border-radius: 10px; margin-left: 50px;
+                        padding: 10px;
+                        margin: 20px;
+                        margin-left: 1cm;"  
+                        id="leftChartContainer">
+                        <!-- Sales Chart Canvas -->
+                          <canvas  id="genderPieChart"></canvas>
+                      </div>
+                      <div class="info-box" 
+                        style=" width: 480px;
+                        height: 400px; border-radius: 10px; margin-left: 50px;
+                        padding: 10px;
+                        margin: 20px;" 
+                        id="rightChartContainer">
+                        <canvas id="genderAgeBarChart"></canvas>
+                      </div>
+                    </div>
+                    <!-- /.chart-responsive -->
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-md-4">
+                  </div>
+                <!-- /.row -->
+              </div>
+              <!-- ./card-body -->
+              <h5 style=" margin-top: 30px;">Recommended Products</h5>
+              <div class="card-footer">
+                <div class="row">
+                  <div class="col-sm-3 col-6">
+                    <div class="description-block border-right">
+                      <h5 class="description-header" id="m1"></h5>
+                      <span class="description-text">Male Product</span>
+                    </div>
+                    <!-- /.description-block -->
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-sm-3 col-6">
+                    <div class="description-block border-right">
+                      <h5 class="description-header" id="m2"></h5>
+                      <span class="description-text">Male Product</span>
+                    </div>
+                    <!-- /.description-block -->
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-sm-3 col-6">
+                    <div class="description-block border-right">
+                      <h5 class="description-header" id="fm1"></h5>
+                      <span class="description-text">Female Product</span>
+                    </div>
+                    <!-- /.description-block -->
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-sm-3 col-6">
+                    <div class="description-block">
+                      <h5 class="description-header" id="fm2"></h5>
+                      <span class="description-text">Female Product</span>
+                    </div>
+                    <!-- /.description-block -->
+                  </div>
+                </div>
+                <!-- /.row -->
+              </div>
+              <!-- /.card-footer -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <script>
+          var cur = 'current';
+          
+          if(cur == 'current'){
+              $.ajax({
+                  headers: { "X-CSRFToken": '{{csrf_token}}' },
+                  url: '',
+                  type: 'POST',
+                  data: {
+                    selectedGraph: cur
+                  },
+                  success: function(response) {
+                    // Update the graph with the received data
+                    updateGraph(response);
+                  },
+                  error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                  }
+              });
+          }
+        
+        
+          $(document).ready(function() {
+              // Function to handle the dropdown selection change
+              $('#graph-select').change(function() {
+                var selectedGraph = $(this).val();
+              
+                // Make an AJAX request to the Django view
+                $.ajax({
+                  headers: { "X-CSRFToken": '{{csrf_token}}' },
+                  url: '',
+                  type: 'POST',
+                  data: {
+                    selectedGraph: selectedGraph
+                  },
+                  success: function(response) {
+                    // Update the graph with the received data
+                    clearGraph();
+                    updateGraph(response);
+                  },
+                  error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                  }
+                });
+              });
+          });
+        
+        
+          function clearGraph(){
+              var graph_1 = document.getElementById('genderPieChart');
+              var graph_2 = document.getElementById('genderAgeBarChart');
+          
+              graph_1.parentNode.removeChild(graph_1);
+              graph_2.parentNode.removeChild(graph_2);
+          
+              var canvas_1 = document.createElement('canvas');
+              var canvas_2 = document.createElement('canvas');
+          
+              canvas_1.id = 'genderPieChart';
+              canvas_2.id = 'genderAgeBarChart';
+          
+              document.getElementById('leftChartContainer').appendChild(canvas_1)
+              document.getElementById('rightChartContainer').appendChild(canvas_2)
+          }
+        
+        
+            // Function to update the graph with the received data
+          function updateGraph(data) {
+              // Replace this with your own graph update logic
+
+              document.getElementById('male_count').innerHTML = data.gender_count[0];
+              document.getElementById('female_count').innerHTML = data.gender_count[1];
+              document.getElementById('maleCategory').innerHTML = data.maleProduct[0];
+              document.getElementById('femaleCategory').innerHTML = data.femaleProduct[0];
+              document.getElementById('m1').innerHTML = data.maleProduct[1];
+              document.getElementById('m2').innerHTML = data.maleProduct[2];
+              document.getElementById('fm1').innerHTML = data.femaleProduct[1];
+              document.getElementById('fm2').innerHTML = data.femaleProduct[2];
+
+
+              var d = document.getElementById('cur_date');
+              d.textContent = data.cur_date;
+              var data1 = {
+                  labels: ['Male', 'Female'],
+                  datasets: [{
+                      data: data.gender_count,
+                      backgroundColor: ['#5580cf', '#ff6347']
+                  }]
+              };
+            
+              // Create the pie chart
+              var ctx = document.getElementById('genderPieChart').getContext('2d');
+              var genderPieChart = new Chart(ctx, {
+                  type: 'pie',
+                  data: data1,
+                  options: {
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      legend: {
+                          labels: {
+                              fontColor: 'white',
+                          },
+                      },
+                      elements: {
+                          arc: {
+                              borderWidth: 0 // Remove segment border
+                          }
+                      },
+                  }
+              });
+            
+            
+              var data2 = {
+                  labels: data.age_cat,
+                  datasets: [{
+                      label: 'Male',
+                      data: data.male_cat,
+                      backgroundColor: '#5580cf',
+                  }, {
+                      label: 'Female',
+                      data: data.female_cat,
+                      backgroundColor: '#ff6347'
+                  }]
+              };
+              // Create the bar chart-->
+              var ctx = document.getElementById('genderAgeBarChart').getContext('2d');
+              var genderAgeBarChart = new Chart(ctx, {
+                  type: 'bar',
+                  data: data2,
+                  options: {
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      scales: {
+                          y: {
+                              beginAtZero: true
+                          },
+                          yAxes: [{
+                            ticks: {
+                                fontColor: 'white' // Label color
+                            }
+                          }],
+                          xAxes: [{
+                            ticks: {
+                                fontColor: 'white' // Label color
+                            }
+                          }]
+                      },
+                      legend: {
+                          labels: {
+                              fontColor: 'white' // Label color
+                          }
+                      }
+                  }
+              });
+          }
+    </script>
+
+{% endblock %}
+
+{% block script %}
+
+
+{% endblock %}
